@@ -91,7 +91,7 @@ GameManager.prototype.addRandomTile = function (isStart) {
   			var tile = new Tile(cell2, 2);
   			this.grid.insertTile(tile);
   		} else {
-  			var value = Math.random() < 0.5 ? 2 : 4;
+  			var value = Math.random() < 0.5 ? 1 : 2;
   			if (value === 2) {
   				var tile = new Tile(cell2, 2);
   				this.grid.insertTile(tile);
@@ -186,14 +186,14 @@ var iterStep = 1;
 }
 
 GameManager.prototype.addRandomTileHelper = function (rate, t) {
-  		var value = Math.random() < rate ? 2 : 4;
+  		var value = Math.random() < rate ? 1 : 2;
   		var tile;
   		var type = 0;
   		if (t) {
   			type = t;
   		}
   		switch(type) {
-  			case 1:
+  			case 0:
   				tile = new Tile(this.grid.availableMaxSpaceCell(), value);
   				break;
   			default:
@@ -261,7 +261,7 @@ GameManager.prototype.move = function (direction) {
 
   if (this.isGameTerminated()) return; // Don't do anything if the game's over
   if (this.grid.maxCellMove(direction)) {
-    var mes=confirm("你确定要移动最大值吗？");
+    var mes=confirm("Are you sure you want to move the maximum value?");
     if(!mes) {
       return;
     }
@@ -287,7 +287,7 @@ GameManager.prototype.move = function (direction) {
 
         // Only one merger per row traversal?
         if (next && next.value === tile.value && !next.mergedFrom) {
-          var merged = new Tile(positions.next, tile.value * 2);
+          var merged = new Tile(positions.next, tile.value + 1);
           merged.mergedFrom = [tile, next];
 
           self.grid.insertTile(merged);
@@ -299,8 +299,8 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += merged.value;
 
-          // The mighty 4096 tile
-          if (merged.value === 4096) self.won = true;
+          // The mighty 12 tile
+          if (merged.value === 12) self.won = true;
         } else {
           self.moveTile(tile, positions.farthest);
         }
